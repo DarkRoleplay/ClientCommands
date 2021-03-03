@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "net.dark_roleplay.clientcommands.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"refmap": "projectbrazier.refmap.json",
+	"mixins": [],
+	"client": [
+		"ChatScreenMixin"
+	],
+	"minVersion": "0.8"
+}
