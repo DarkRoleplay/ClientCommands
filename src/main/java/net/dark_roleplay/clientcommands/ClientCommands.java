@@ -1,5 +1,6 @@
 package net.dark_roleplay.clientcommands;
 
+import com.ibm.icu.impl.Pair;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.command.CommandSource;
@@ -8,6 +9,8 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.function.Consumer;
 
 @Mod(ClientCommands.MODID)
 public class ClientCommands {
@@ -22,11 +25,23 @@ public class ClientCommands {
 	}
 
 	public void imcCallback(InterModProcessEvent event){
-		event.getIMCStream("client_commands"::equals)
-				.map(message -> message.getMessageSupplier().get())
-				.filter(o -> o instanceof LiteralArgumentBuilder<?>)
-				.map(o -> (LiteralArgumentBuilder<CommandSource>) o)
-				.forEachOrdered(COMMANDS_DISPATCHER::register);
+		event.getIMCStream("register_command"::equals)
+				.map(message -> Pair.of(message.getSenderModId(), message.getMessageSupplier().get()))
+				.filter(command -> command.second instanceof LiteralArgumentBuilder<?>)
+				.map(command -> Pair.of(command.first, (LiteralArgumentBuilder<CommandSource>) command.second))
+				.forEachOrdered(command -> {
+					LOGGER.debug("Registering client command '{1}' for '{0}'", command.first, command.second.getLiteral());
+					COMMANDS_DISPATCHER.register(command.second);
+				});
+
+		event.getIMCStream("register_commands"::equals)
+				.map(message -> Pair.of(message.getSenderModId(), message.getMessageSupplier().get()))
+				.filter(command -> command.second instanceof Consumer<?>)
+				.map(command -> Pair.of(command.first, (Consumer<CommandDispatcher<CommandSource>>) command.second))
+				.forEachOrdered(command -> {
+					LOGGER.debug("Calling command registry callback for '{0}'", command.first);
+					command.second.accept(COMMANDS_DISPATCHER);
+				});
 	}
 
 	public static char getMarker(){

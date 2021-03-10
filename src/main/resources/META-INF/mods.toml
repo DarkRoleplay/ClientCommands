@@ -1,20 +1,18 @@
-modLoader="javafml" #mandatory
-loaderVersion="[28,)" #mandatory (24 is current forge generatorVersion)
-issueTrackerURL="http://my.issue.tracker/" #optional
-license="ARR"
+modLoader="javafml"
+loaderVersion="[25,)"
+license="https://github.com/DarkRoleplay/ClientCommands/blob/1.16/release/LICENSE.md"
 
 [[mods]]
 	modId="clientcommands"
 	generatorVersion="${version}"
-	displayName="Dark Roleplay MARG"
+	displayName="ClientCommands"
 	displayURL="https://dark-roleplay.net/"
 	#logoFile="examplemod.png" #optional
 	credits="Lead Programmer: JTK222"
 	authors=["JTK222"]
 	description='''
-Dark Roleplay MARG or by it's full name "Materials and Automatic Resource Generation",
-is a small but very usefull utility mod, which main purpose it is to increase inter mod compatbility.
-This is achieved by adding so called "Materials" for example all existing wood types are a material.
-Mods can then use this materials to automatically add correspsonding variants of their blocks and items.
-Additionally to this, they can also automatically generate assets, like textures and or models.
+	Client Commands is a tiny utility mod/library,
+	which allows other mods to easily register client side commands.
+	And also provides auto completion for them in the chat.
+	The prefix for client side commands is !
 '''
