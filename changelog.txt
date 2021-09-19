@@ -1,3 +1,7 @@
+v1.2
+* Fixed version in mods.toml
+* Client commands are now properly added into message history
+
 v1.1
 + Added another way to register client side commands
 

@@ -1,10 +1,10 @@
 modLoader="javafml"
-loaderVersion="[25,)"
+loaderVersion="[32,)"
 license="https://github.com/DarkRoleplay/ClientCommands/blob/1.16/release/LICENSE.md"
 
 [[mods]]
 	modId="clientcommands"
-	generatorVersion="${version}"
+	version="${version}"
 	displayName="ClientCommands"
 	displayURL="https://dark-roleplay.net/"
 	#logoFile="examplemod.png" #optional

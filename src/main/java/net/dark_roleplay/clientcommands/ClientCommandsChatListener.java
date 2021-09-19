@@ -22,6 +22,7 @@ public class ClientCommandsChatListener {
 				ParseResults<CommandSource> parse = ClientCommands.getCommandDispatcher().parse(event.getMessage().substring(1), source);
 				if(parse.getContext().getNodes().size() > 0){
 					event.setCanceled(true);
+					Minecraft.getInstance().ingameGUI.getChatGUI().addToSentMessages(event.getOriginalMessage());
 					ClientCommands.getCommandDispatcher().execute(parse);
 				}
 			} catch (CommandSyntaxException e) {}

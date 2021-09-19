@@ -1,188 +1,43 @@
-buildscript {
-    repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
-        mavenCentral()
-        maven { url "https://plugins.gradle.org/m2/" }
-        maven { url 'https://dist.creeper.host/Sponge/maven'}
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath 'com.wynprice.cursemaven:CurseMaven:1.2.3'
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-        classpath 'com.github.wnameless.json:json-flattener:0.12.0'
-    }
-}
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply from: 'gradle/property_helper.gradle'
+apply from: 'gradle/property_loader.gradle'
 
-plugins {
-    id 'com.wynprice.cursemaven' version "2.1.5"
-    id 'com.matthewprenger.cursegradle' version '1.4.0'
-    id 'idea'
-    id 'maven-publish'
-}
+ext.modName = getRequiredString('mod_name')
+ext.modAuthor = getRequiredString('mod_author')
+ext.modId = getRequiredString('mod_id')
+ext.modCredits = getDefaultString('mod_credits', ext.modAuthor)
+ext.modDescription = getOptionalString('mod_description')
+ext.modChangelog = getOptionalString('mod_changelog')
+ext.modHomepage = getOptionalString('mod_homepage')
+ext.modSource = getOptionalString('mod_source')
+ext.modIssues = getOptionalString('mod_issues')
 
-//The Plugin block only works for plugins in the gradle maven
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'com.wynprice.cursemaven'
-apply plugin: 'org.spongepowered.mixin'
+// Load Minecraft specific properties
+ext.mcVersion = getRequiredString('minecraft_version')
 
-version = "${mc_version}-${mod_version}"
-group = "net.dark_roleplay.${modid}"
-archivesBaseName = "${modid}"
+// Load build-time modules
+//apply from: 'gradle/build_number.gradle'
+apply from: 'gradle/common_manifest.gradle'
+apply from: 'gradle/common_artifacts.gradle'
+apply from: 'gradle/forge.gradle'
+apply from: 'gradle/minify_jsons.gradle'
+//apply from: 'gradle/git_changelog.gradle'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
-mixin {
-    add sourceSets.main, "${modid}.refmap.json"
-}
+// Load publishing modules
+apply from: 'gradle/maven.gradle'
+//apply from: 'gradle/signing.gradle'
+apply from: 'gradle/curseforge.gradle'
+//apply from: 'gradle/version_checker.gradle'
 
-minecraft {
-    mappings channel: 'snapshot', version: "${mapping}-${mcp_version}"
-
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-    runs {
-        client {
-            workingDirectory project.file('runs/client')
-            arg "-mixin.config=" + modid + ".mixins.json"
-
-            mods {
-                marg {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file('runs/server')
-            arg "-mixin.config=" + modid + ".mixins.json"
-
-            mods {
-                marg {
-                    source sourceSets.main
-                }
-            }
+// IntelliJ Project Import
+// The Mixin annotation process does not have an obfuscation source when running through the IntelliJ compiler,
+// thus we have to prevent it from being activated as part of importing this Gradle project into IntelliJ.
+if (System.getProperty("idea.sync.active") == "true") {
+    afterEvaluate {
+        tasks.withType(JavaCompile).all {
+            it.options.annotationProcessorPath = files()
         }
     }
 }
-
-repositories {
-    maven {url = "https://minecraft.curseforge.com/api/maven/"}
-    mavenLocal()
-}
-
-dependencies {
-    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
-}
-
-jar {
-    from sourceSets.main.output.classesDirs
-    from sourceSets.main.output.resourcesDir
-
-    manifest {
-        attributes([
-            "Specification-Title": "${modid}",
-            "Specification-Vendor": "Dark Roleplay",
-            "Specification-Version": "1.0",
-            "Implementation-Title": "Client Commands",
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"Dark Roleplay",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            "MixinConfigs": "${modid}.mixins.json"
-        ])
-    }
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
-
-import groovy.json.JsonSlurper
-import groovy.json.JsonOutput
-
-processResources {
-    from(sourceSets.main.resources.srcDirs) {
-        include 'META-INF/mods.toml'
-
-        expand 'version': project.version
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'META-INF/mods.toml'
-    }
-
-    // Minify json resources
-    doLast {
-        fileTree(dir: outputs.files.asPath, include: "**/*.json").each {
-            File file -> file.text = JsonOutput.toJson(new JsonSlurper().parse(file))
-        }
-    }
-}
-
-curseforge {
-    apiKey = System.getenv('CURSE_API_KEY') // This should really be in a gradle.properties file
-    project {
-        id = '453057'
-        changelog = file('changelog.txt') // A file can also be set using: changelog = file('changelog.txt')
-        releaseType = 'release'
-        mainArtifact(jar) {
-            displayName = "Client Commands - ${mc_version} - v${mod_version}"
-        }
-    }
-}
-
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId = project.group
-            artifactId = project.archivesBaseName
-            version = project.version
-
-            artifact reobfArtifact
-            artifact sourcesJar
-            artifact javadocJar
-        }
-    }
-    repositories {
-        maven {
-            url System.getenv("MVN_REPO")
-            credentials {
-                username System.getenv("MVN_USER")
-                password System.getenv("MVN_PASSWORD")
-            }
-        }
-    }
-}
-
-//import net.minecraftforge.gradle.common.task.SignJar
-//
-//task signJar(type: SignJar, dependsOn: jar) {
-//    onlyIf { // Skip the task if our secret data isn't available
-//        project.hasProperty('keyStore')
-//    }
-//
-//    keyStore = project.keyStore
-//    alias = project.keyStoreAlias
-//    storePass = project.keyStorePass
-//    keyPass = project.keyStoreKeyPass
-//    inputFile = jar.archivePath
-//    outputFile = jar.archivePath
-//}
-//
-//build.dependsOn signJar
