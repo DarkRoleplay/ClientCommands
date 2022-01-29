@@ -1,6 +1,6 @@
 {
-    "pack": {
-        "description": "ClientCommands",
-        "pack_format": 5
-    }
+  "pack": {
+    "description": "clientcommands resources",
+    "pack_format": 8
+  }
 }

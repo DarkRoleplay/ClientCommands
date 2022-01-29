@@ -1,18 +1,31 @@
-modLoader="javafml"
-loaderVersion="[32,)"
+modLoader = "javafml"
+loaderVersion = "[39,)"
 license="https://github.com/DarkRoleplay/ClientCommands/blob/1.16/release/LICENSE.md"
 
 [[mods]]
-	modId="clientcommands"
-	version="${version}"
-	displayName="ClientCommands"
-	displayURL="https://dark-roleplay.net/"
-	#logoFile="examplemod.png" #optional
-	credits="Lead Programmer: JTK222"
-	authors=["JTK222"]
-	description='''
-	Client Commands is a tiny utility mod/library,
-	which allows other mods to easily register client side commands.
-	And also provides auto completion for them in the chat.
-	The prefix for client side commands is !
-'''
+modId="clientcommands"
+version = "${file.jarVersion}"
+displayName="ClientCommands"
+displayURL="https://dark-roleplay.net/"
+#logoFile="examplemod.png" #optional
+credits="Lead Programmer: JTK222, 1.18 Port: PORTB"
+authors="JTK222"
+description='''
+Client Commands is a tiny utility mod/library,
+which allows other mods to easily register client side commands.
+And also provides auto completion for them in the chat.
+The default prefix for client side commands is !'''
+
+[[dependencies.clientcommands]]
+modId = "forge"
+mandatory = true
+versionRange = "[39,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.clientcommands]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.18.1,1.19)"
+ordering = "NONE"
+side = "BOTH"
