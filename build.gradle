@@ -17,7 +17,7 @@ apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 group = 'net.dark_roleplay'
-version = '1.18-1.0'
+version = '1.18-1.0.1'
 
 java {
     archivesBaseName = 'clientcommands'
@@ -74,7 +74,7 @@ minecraft {
 }
 
 mixin {
-    add sourceSets.main, "clientcommands.refmap.json"
+    //add sourceSets.main, "clientcommands.refmap.json"
 
     config "clientcommands.mixins.json"
 }
@@ -108,4 +108,4 @@ jar {
     }
 }
 
-jar.finalizedBy('reobfJar')
+//jar.finalizedBy('reobfJar')
