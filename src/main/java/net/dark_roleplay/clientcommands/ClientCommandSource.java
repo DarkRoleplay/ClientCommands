@@ -15,6 +15,6 @@ import javax.annotation.Nullable;
 public class ClientCommandSource extends CommandSourceStack
 {
 	public ClientCommandSource(CommandSource sourceIn, Vec3 posIn, Vec2 rotationIn, ServerLevel worldIn, int permissionLevelIn, String nameIn, Component displayNameIn, MinecraftServer serverIn, @Nullable Entity entityIn) {
-		super(sourceIn, posIn, rotationIn, worldIn, permissionLevelIn, nameIn, displayNameIn, serverIn, entityIn, true, (a, b, c) -> {}, EntityAnchorArgument.Anchor.FEET);
+		super(sourceIn, posIn, rotationIn, worldIn, permissionLevelIn, nameIn, displayNameIn, serverIn, entityIn, false, (a, b, c) -> {}, EntityAnchorArgument.Anchor.FEET);
 	}
 }
