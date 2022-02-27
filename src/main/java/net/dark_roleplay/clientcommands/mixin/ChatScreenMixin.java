@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class ChatScreenMixin {
 
 	@Redirect(method = "init", at = @At(value = "NEW", target = "Lnet/minecraft/client/gui/components/CommandSuggestions;"))
-	public CommandSuggestions wrapSuggestionHelper(Minecraft mc, Screen screen, EditBox inputField, Font font, boolean commandsOnly, boolean hasCursor, int minAmountRendered, int maxAmountRendered, boolean isChat, int color) {
+	public CommandSuggestions initialize(Minecraft mc, Screen screen, EditBox inputField, Font font, boolean commandsOnly, boolean hasCursor, int minAmountRendered, int maxAmountRendered, boolean isChat, int color) {
 		return new ClientCommandSuggestions(mc, screen, inputField, font, commandsOnly, hasCursor, minAmountRendered, maxAmountRendered, isChat, color);
 	}
 }

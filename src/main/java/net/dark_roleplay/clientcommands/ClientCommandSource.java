@@ -12,9 +12,9 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
-public class ClientCommandSource extends CommandSourceStack
-{
-	public ClientCommandSource(CommandSource sourceIn, Vec3 posIn, Vec2 rotationIn, ServerLevel worldIn, int permissionLevelIn, String nameIn, Component displayNameIn, MinecraftServer serverIn, @Nullable Entity entityIn) {
-		super(sourceIn, posIn, rotationIn, worldIn, permissionLevelIn, nameIn, displayNameIn, serverIn, entityIn, false, (a, b, c) -> {}, EntityAnchorArgument.Anchor.FEET);
+public class ClientCommandSource extends CommandSourceStack {
+	public ClientCommandSource(CommandSource source, Vec3 pos, Vec2 rotation, ServerLevel world, int permissionLevel, String name, Component displayName, MinecraftServer server, @Nullable Entity entity) {
+		super(source, pos, rotation, world, permissionLevel, name, displayName, server, entity, false, (a, b, c) -> {
+		}, EntityAnchorArgument.Anchor.FEET);
 	}
 }

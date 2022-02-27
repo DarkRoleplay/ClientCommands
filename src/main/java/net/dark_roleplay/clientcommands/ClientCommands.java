@@ -3,6 +3,7 @@ package net.dark_roleplay.clientcommands;
 import com.ibm.icu.impl.Pair;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import net.dark_roleplay.clientcommands.config.Config;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -17,7 +18,7 @@ import java.util.function.Consumer;
 @Mod(ClientCommands.MODID)
 public class ClientCommands {
 
-	public static final String	MODID	= "clientcommands";
+	public static final String MODID = "clientcommands";
 	public static final Logger LOGGER = LogManager.getLogger();
 
 	private static final CommandDispatcher<CommandSourceStack> COMMANDS_DISPATCHER = new CommandDispatcher<>();
@@ -27,7 +28,7 @@ public class ClientCommands {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.SPEC, MODID + ".toml");
 	}
 
-	public void imcCallback(InterModProcessEvent event){
+	public void imcCallback(InterModProcessEvent event) {
 		event.getIMCStream("register_command"::equals)
 				.map(message -> Pair.of(message.modId(), message.messageSupplier().get()))
 				.filter(command -> command.second instanceof LiteralArgumentBuilder<?>)
@@ -47,11 +48,7 @@ public class ClientCommands {
 				});
 	}
 
-	public static char getMarker(){
-		return Config.markerChar.get().charAt(0);
-	}
-
-	public static CommandDispatcher<CommandSourceStack> getCommandDispatcher(){
+	public static CommandDispatcher<CommandSourceStack> getCommandDispatcher() {
 		return COMMANDS_DISPATCHER;
 	}
 }

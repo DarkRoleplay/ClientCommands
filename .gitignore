@@ -26,3 +26,5 @@ forge*changelog.txt
 runs
 src/main/resources/assets/drpmedieval
 src/test
+
+gradle/remote_script_cache/

@@ -1,12 +1,12 @@
 modLoader = "javafml"
 loaderVersion = "[39,)"
-license="https://github.com/DarkRoleplay/ClientCommands/blob/1.16/release/LICENSE.md"
+license="https://gist.github.com/JTK222/b85b336bfae5c29e796d0934894aca3e#file-dark-roleplay-mod-license-v1-md"
 
 [[mods]]
 modId="clientcommands"
-version = "${file.jarVersion}"
-displayName="ClientCommands"
-displayURL="https://dark-roleplay.net/"
+version = "1.3"
+displayName="Client Commands"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/client-commands"
 #logoFile="examplemod.png" #optional
 credits="Lead Programmer: JTK222, 1.18 Port: PORTB"
 authors="JTK222"
@@ -26,6 +26,6 @@ side = "BOTH"
 [[dependencies.clientcommands]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.18.1,1.19)"
+versionRange = "[1.18.1,)"
 ordering = "NONE"
 side = "BOTH"

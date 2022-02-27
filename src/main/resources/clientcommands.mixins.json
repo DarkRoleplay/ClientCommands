@@ -1,8 +1,8 @@
 {
   "required": true,
-  "minVersion": "0.8",
+  "minVersion": "0.8.4",
   "package": "net.dark_roleplay.clientcommands.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_17",
   "refmap": "clientcommands.refmap.json",
   "mixins": [
   ],
